@@ -1,0 +1,159 @@
+#include <iostream>
+using namespace std;
+
+class Course {
+public:
+
+    // this constructor initializes a Node with given value
+    Course(int x) {
+        this->capacity = x;
+    }
+
+    Course() {}
+
+    void setCap(int x) {
+        this->capacity = x;
+    }
+    void setPrev(Course* prev) {
+        this->ptr_prev = prev;
+    }
+    void setNext(Course* next) {
+        this->ptr_next = next;
+    }
+    int getCap() {
+        return this->capacity;
+    }
+    Course* getPrev() {
+        return this->ptr_prev;
+    }
+    Course* getNext() {
+        return this->ptr_next;
+    }
+private:
+    int capacity;
+    Course* ptr_prev = nullptr, * ptr_next = nullptr;
+};
+
+void displayList(Course* head)
+{
+    while (head != nullptr) {
+        cout << head->getCap() << " ";
+        head = head->getNext();
+
+    }
+
+}
+
+// Insert a new node after a given node
+Course* insert(Course* node, int node_data)
+{
+    Course* temp = new Course(node_data);
+    temp->setPrev(node);
+    node->setNext(temp);
+    return temp;
+}
+
+Course* binarySearch(int key, Course* first, Course* last) {
+
+    // find the first of the input and last of the input
+    if (key < first->getCap()) {
+        return first;
+    }
+    else if (key > last->getCap()) {
+        return last;
+    }
+
+    Course* orgLeft = first;
+    Course* orgRight = last;
+
+    // this section covers the first integer to go to the far right, and the last integer to the far left untill they equal each other.
+    while ((first != last) && (first->getNext() != last)) {
+        first = first->getNext();
+        last = last->getPrev();
+    }
+    if (first->getCap() == key) {
+        return first;
+    }
+    else if (first->getCap() < key) {
+        return binarySearch(key, last, orgRight);
+    }
+    else if (first->getCap() > key) {
+        return binarySearch(key, orgLeft, first);
+    }
+
+}
+
+int main()
+{
+    int capacity, task, key;
+    int count = 0;
+    cin >> task >> key >> capacity;
+
+    Course* headNode = new Course(capacity);
+    Course* tail = headNode;
+    Course* temp = headNode;
+
+    while (cin >> capacity) {
+        temp = insert(temp, capacity);
+        tail = temp;
+    }
+
+    Course* searchResult = binarySearch(key, headNode, tail);
+    switch (task) {
+
+    case 0:
+        //binarySearch for key value
+        if (searchResult->getCap() == key) {
+            int index = 0;
+            Course* check_index = headNode;
+            while (check_index != searchResult) {
+                ++index;
+                check_index = check_index->getNext();
+            }
+            cout << " " << index;
+        }
+        else {
+            cout << -1;
+        }
+
+        break;
+    case 1:
+        //Search for key value, if it is not in it, add it.
+        if (searchResult->getCap() != key) {
+
+            Course* node = new Course(key);
+            if (key < headNode->getCap()) {
+                node->setNext(headNode);
+                headNode->setPrev(node);
+                headNode = node;
+            }
+            else if (key > tail->getCap()) {
+                node->setPrev(tail);
+                tail->setNext(node);
+                tail = node;
+            }
+            else {
+                temp = headNode;
+                while (key > temp->getCap() && temp->getNext() != nullptr)
+                {
+                    temp = temp->getNext();
+                }
+                temp = temp->getPrev();
+                node->setNext(temp->getNext());
+                if (temp->getNext() != nullptr)
+                    temp->getNext()->setPrev(node);
+                node->setPrev(temp);
+                temp->setNext(node);
+            }
+        }
+        // Delete the element if the key value exists in the capacity
+        else {
+            searchResult->getPrev()->setNext(searchResult->getNext());
+            searchResult->getNext()->setPrev(searchResult->getPrev());
+        }
+        displayList(headNode);
+        break;
+    }
+    return 0;
+
+}
