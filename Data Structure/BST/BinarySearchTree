@@ -1,0 +1,223 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+class BST {
+private:
+	struct TNode {
+		int cap;
+		TNode* left;
+		TNode* right;
+		TNode(int val, TNode* left = NULL, TNode* right = NULL) {
+			this->cap = val;
+			this->left = left;
+			this->right = right;
+
+		}
+	};
+	TNode* root;
+
+	//constructing BST
+	void insert(TNode*& tree, int cap) {
+		if (tree == NULL) {
+
+			tree = new TNode(cap);
+			return;
+		}
+		if (cap == tree->cap) {
+			return;
+		}
+		if (cap < tree->cap) {
+			insert(tree->left, cap);
+		}
+		else {
+			insert(tree->right, cap);
+		}
+	}
+
+	void displayOrder(TNode* tree) {
+		if (tree == NULL) {
+			return;
+		}
+		else {
+			displayOrder(tree->left);
+			displayOrder(tree->right);
+			if (tree->cap != 0) {
+				cout << tree->cap << " ";
+			}
+		}
+	}
+
+public:
+	BST() {
+		root = NULL;
+	}
+	void insert(int cap) {
+		insert(root, cap);
+	}
+
+	void showOrder() {
+		displayOrder(root);
+	}
+	void search(int key) {
+		//if letter is in tree, then we search
+		TNode* tree = root;
+		bool found = false;
+
+		while (tree != NULL) {
+			if (tree->cap == key) {
+				found = true;
+				break;
+			}
+			else if (key < tree->cap) {
+				tree = tree->left;
+			}
+			else if (key > tree->cap) {
+				tree = tree->right;
+			}
+		}
+		if (found == true) {
+
+			showOrder();
+		}
+		else {
+			cout << "-1" << endl;
+		}
+
+
+	}
+
+	void ins(int key) {
+		//if letter is in tree, then we insert
+		TNode* tree = root;
+		bool found = false;
+		while (tree != NULL) {
+			if (tree->cap == key) {
+				found = true;
+				break;
+			}
+			else if (key < tree->cap) {
+				tree = tree->left;
+			}
+			else if (key > tree->cap) {
+				tree = tree->right;
+			}
+		}
+		if (found == true) {
+
+			cout << "-1" << endl;
+
+		}
+		else {
+			insert(key);
+			showOrder();
+
+		}
+
+
+	}
+	TNode* FindMax(TNode* root)
+	{
+		//find the max of right side
+		if (root == NULL)
+			return NULL;
+
+		while (root->right != NULL)
+		{
+			root = root->right;
+		}
+		return root;
+	}
+	void del(int data)
+	{
+		//if letter is in tree, delete
+		TNode* tree = root;
+
+		bool found = false;
+		while (tree != NULL) {
+			if (tree->cap == data) {
+				found = true;
+				break;
+			}
+			else if (data < tree->cap) {
+				tree = tree->left;
+			}
+			else if (data > tree->cap) {
+				tree = tree->right;
+			}
+
+		}
+		if (found == true) {
+
+			//No child
+			if (tree->right == NULL && tree->left == NULL)
+			{
+				delete tree;
+				tree = NULL;
+			}
+			//One child 
+			else if (tree->right == NULL)
+			{
+				TNode* temp = tree;
+				tree = tree->left;
+				delete temp;
+			}
+			else if (tree->left == NULL)
+			{
+				TNode* temp = tree;
+				tree = tree->right;
+				delete temp;
+			}
+			//two child
+			else
+			{
+				TNode* temp = FindMax(tree->left);
+				tree->cap = temp->cap;
+				tree = tree->left;
+			}
+			showOrder();
+
+		}
+		else {
+			cout << "-1 " << endl;
+
+
+		}
+	}
+
+
+};
+int main() {
+	BST tree;
+	vector<int> dList;
+	int cap, task, key;
+	//get the input ending with s
+	while (cin >> cap) {
+		dList.push_back(cap);
+	}
+
+	cin.clear();
+	cin.ignore(10000, '\n');
+	for (int i = 0; i < dList.size(); i++) {
+		tree.insert(dList.at(i));
+	}
+	//task for search,insert and deletion
+	cin >> task;
+	switch (task) {//key is the goal in order to perform the tasks
+	case 1://search
+		cin >> key;
+		tree.search(key);
+
+		break;
+	case 2://insert
+		cin >> key;
+		tree.ins(key);
+
+		break;
+	case 3://deletion
+		cin >> key;
+		tree.del(key);
+		break;
+	}
+
+	return 0;
+}
