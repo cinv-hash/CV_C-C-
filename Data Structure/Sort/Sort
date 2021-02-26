@@ -1,0 +1,129 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+    // A function to implement bubble sort  
+
+    void bubbleSort(vector<int> &arr)
+    {
+        int i, j,temp;
+        for (i = 0; i < arr.size(); i++) {
+            for (j = 0; j < arr.size() - 1; j++) {
+                if (arr[j+1]>arr[j]) {
+                    temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+    }
+    // a function to implement selection sort
+    void selectionSort(vector<int> &arr) {
+
+        int i, j, minIndex, tmp;
+
+        for (i = 0; i < arr.size() - 1; i++) {
+
+            minIndex = i;
+
+            for (j = i + 1; j < arr.size(); j++)
+
+                if (arr[j] > arr[minIndex])
+
+                    minIndex = j;
+
+            if (minIndex != i) {
+
+                tmp = arr[i];
+
+                arr[i] = arr[minIndex];
+
+                arr[minIndex] = tmp;
+
+            }
+
+        }
+
+    }
+    //a function to merge the left side and right side of the divided array.
+    void mergeSort(vector<int>& arr, vector<int>& left, vector<int>& right)
+    {
+        int leftL = left.size();
+        int rightL = right.size();
+        int i = 0, j = 0, k = 0;
+
+        while (j < leftL && k < rightL)
+        {
+            if (left[j] > right[k]) {
+                arr[i] = left[j];
+                j++;
+            }
+            else {
+                arr[i] = right[k];
+                k++;
+            }
+            i++;
+        }
+        while (j < leftL) {
+            arr[i] = left[j];
+            j++; i++;
+        }
+        while (k < rightL) {
+            arr[i] = right[k];
+            k++; i++;
+        }
+    }
+
+    // Driver code  
+    int main()
+    {     
+        //intialize integers for getting the elements and the task number
+        int n,task;
+        vector<int> arr,left,right;//vector for an array, a left list and right list
+
+        cin >> task;//input wheter 0 for bubble sort or 1 for merge sort(+selection sort)
+
+        while (cin >> n) {
+            arr.push_back(n);//while entering the integers, store the elements into a vector or in this case, arr.
+        }
+        
+        //if 0, then bubble sort, if 1 then merge sort(+selection sort)
+        switch (task) {
+        case 0:
+            //call the function to bubble sort the inputted elements that had been stored inside the vector.
+            bubbleSort(arr);
+            
+            //basic for loop to print out the bubble sorted array.
+            for (int i = 0; i < arr.size(); i++) {
+                cout << arr[i] << " ";
+            } 
+            break;
+        case 1:
+
+            //to find the midpoint, divide the array size by 2.
+            int m = (arr.size() / 2);
+
+            
+            for (int i = 0; i < m; i++) {
+                left.push_back(arr[i]);// stores it inside a left list vector.
+            }
+            for (int i = m; i < arr.size(); i++) {
+                right.push_back(arr[i]);// stores it inside a right list vector.
+            }
+
+
+            selectionSort(left); //call the function to select sort the left sublist
+            selectionSort(right);//call the function to select sort the right sublist
+            mergeSort(arr, left, right);// call the function merge sort, to merge both the left and right list into a sorted array.
+
+            //basic for loop to print out the merge sort (+selection sort)
+            for (int i = 0; i < arr.size(); i++) {
+                cout << arr[i] << " ";
+            }
+            break;
+        }
+        return 0;
+    }
+
+
+
