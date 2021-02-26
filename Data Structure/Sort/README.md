@@ -13,53 +13,19 @@ Program Input and Output
 
 Program Input and Output Example
 ---
-Example of Successful Search
+Input for bubble sort
 ---
-14 27 36 9 7 11 s, 1, 27
+0, 5 2 17 21 9 1 7 s
 
 Output
 ---
-7 11 9 36 27 14
+21 17 9 7 5 2 1
 
-Example of Search Failure
+
+Input for merge sort(+selection sort)
 ---
-14 27 36 9 7 11 s, 1, 8
+1, 31 54 68 43 69 88 12 
 
 Output
 ---
--1
-
-
-
-Example of Successful Insertion
----
-14 27 36 9 7 11 s, 2, 20
-
-Output
----
-7 11 9 20 36 27 14
-
-Example of Insertion Failure
----
-14 27 36 9 7 11 s, 2, 36
-
-Output
----
--1
-
-
-Example of Successful Deletion
----
-14 27 36 9 7 11 s, 3, 11
-
-Output
----
-7 9 36 27 14
-
-Example of Deletion Failure
----
-14 27 36 9 7 11 s, 3, 8
-
-Output
----
--1
+88 69 68 54 43 31 12
